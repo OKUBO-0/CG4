@@ -22,5 +22,9 @@ public:
 	void Draw();
 
 private:
+	// パーティクル
+	Model* modelParticle_ = nullptr;
 
+	// カメラ
+	Camera* camera_;
 };
