@@ -6,6 +6,12 @@ using namespace KamataEngine;
 class GameScene
 {
 public:
+	// コンストラクタ
+	GameScene();
+
+	// デストラクタ
+	~GameScene();
+	
 	// 初期化
 	void Initialize();
 
@@ -14,4 +20,11 @@ public:
 
 	// 描画
 	void Draw();
+
+private:
+	// パーティクル
+	Model* modelParticle_ = nullptr;
+
+	// カメラ
+	Camera* camera_;
 };

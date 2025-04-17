@@ -2,8 +2,21 @@
 
 using namespace KamataEngine;
 
-void GameScene::Initialize() {
+// コンストラクタ
+GameScene::GameScene() {
+}
 
+// デストラクタ
+GameScene::~GameScene() {
+	delete modelParticle_;
+}
+
+void GameScene::Initialize() {
+	// パーティクル
+	modelParticle_ = Model::CreateSphere(4, 4);
+
+	// カメラ
+	camera_->Initialize();
 }
 
 void GameScene::Update() {
