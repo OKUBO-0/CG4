@@ -9,7 +9,10 @@ GameScene::GameScene() {
 // デストラクタ
 GameScene::~GameScene() { 
 	delete modelParticle_; 
-	delete particle_;
+	for (Particle* particle : particles_) {
+		delete particle;
+	}
+	particles_.clear();
 }
 
 void GameScene::Initialize() {
@@ -25,13 +28,23 @@ void GameScene::Initialize() {
 
 	// パーティクル
 	modelParticle_ = Model::CreateSphere(4, 4);
-	particle_ = new Particle();
-	particle_->Initialize(modelParticle_);
+	for (int i = 0; i < 150; i++) {
+		// 生成
+		Particle* particle = new Particle();
+		// 位置
+		Vector3 position = { 0.5f * i, 0.0f, 0.0f };
+		// 初期化
+		particle->Initialize(modelParticle_, position);
+		// リストに追加
+		particles_.push_back(particle);
+	}
 }
 
 void GameScene::Update() {
 	// パーティクル
-	particle_->Update();
+	for (Particle* particle : particles_) {
+		particle->Update();
+	}
 }
 
 void GameScene::Draw() {
@@ -41,8 +54,10 @@ void GameScene::Draw() {
 	// 3Dモデル描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
 
-	// パーティクル
-	particle_->Draw(camera_);
+	// パーティクルの描画
+	for (Particle* particle : particles_) {
+		particle->Draw(camera_);
+	}
 
 	// 3Dモデル描画後処理
 	Model::PostDraw();

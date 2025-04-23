@@ -3,7 +3,7 @@
 using namespace KamataEngine;
 using namespace MathUtility;
 
-void Particle::Initialize(Model* model) {
+void Particle::Initialize(Model* model, Vector3 position) {
 	// NULLポインタチェック
 	assert(model); 
 	model_ = model;
@@ -14,6 +14,7 @@ void Particle::Initialize(Model* model) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
+	worldTransform_.translation_ = position;
 }
 
 void Particle::Update() {
