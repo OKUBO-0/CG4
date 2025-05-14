@@ -17,6 +17,9 @@ public:
 	// 更新
 	void Update();
 
+	// パーティクル発生
+	void ParticleBorn(KamataEngine::Vector3 position);
+
 	// 描画
 	void Draw();
 

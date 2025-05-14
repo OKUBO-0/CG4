@@ -32,18 +32,9 @@ void GameScene::Initialize() {
 
 	// パーティクル
 	modelParticle_ = Model::CreateSphere(4, 4);
-	for (int i = 0; i < 150; i++) {
-		// 生成
-		Particle* particle = new Particle();
-		// 位置
-		Vector3 position = { 0.0f, 0.0f, 0.0f };
-		// 速度
-		Vector3 velocity = { Distribution(randomEngine), Distribution(randomEngine), 0 };
-		// 初期化
-		particle->Initialize(modelParticle_, position, velocity);
-		// リストに追加
-		particles_.push_back(particle);
-	}
+
+	// 乱数の初期化
+	srand((unsigned)time(NULL));
 }
 
 void GameScene::Update() {
@@ -51,6 +42,7 @@ void GameScene::Update() {
 	for (Particle* particle : particles_) {
 		particle->Update();
 	}
+
 	// 終了フラグの立ったパーティクルを削除
 	particles_.remove_if([](Particle* particle) {
 		if (particle->IsFinished()) {
@@ -59,6 +51,28 @@ void GameScene::Update() {
 		}
 		return false;
 		});
+
+	// 確率で発生
+	if (rand() % 20 == 0) {
+		// 発生位置は乱数
+		Vector3 position = { Distribution(randomEngine) * 30.0f, Distribution(randomEngine) * 20.0f, 0 };
+		// パーティクルの生成
+		ParticleBorn(position);
+	}
+}
+
+// パーティクル発生
+void GameScene::ParticleBorn(Vector3 position) {
+	for (int i = 0; i < 150; i++) {
+		// 生成
+		Particle* particle = new Particle();
+		// 速度
+		Vector3 velocity = { Distribution(randomEngine), Distribution(randomEngine), 0 };
+		// 初期化
+		particle->Initialize(modelParticle_, position, velocity);
+		// リストに追加
+		particles_.push_back(particle);
+	}
 }
 
 void GameScene::Draw() {
