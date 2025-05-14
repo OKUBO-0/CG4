@@ -1,14 +1,18 @@
 #include "GameScene.h"
+#include <random>
 
 using namespace KamataEngine;
 
+std::random_device seedGenerator;
+std::mt19937 randomEngine(seedGenerator());
+std::uniform_real_distribution<float> Distribution(-1.0f, 1.0f);
+
 // コンストラクタ
-GameScene::GameScene() {
-}
+GameScene::GameScene() {}
 
 // デストラクタ
-GameScene::~GameScene() { 
-	delete modelParticle_; 
+GameScene::~GameScene() {
+	delete modelParticle_;
 	for (Particle* particle : particles_) {
 		delete particle;
 	}
@@ -32,9 +36,11 @@ void GameScene::Initialize() {
 		// 生成
 		Particle* particle = new Particle();
 		// 位置
-		Vector3 position = { 0.5f * i, 0.0f, 0.0f };
+		Vector3 position = { 0.0f, 0.0f, 0.0f };
+		// 速度
+		Vector3 velocity = { Distribution(randomEngine), Distribution(randomEngine), 0 };
 		// 初期化
-		particle->Initialize(modelParticle_, position);
+		particle->Initialize(modelParticle_, position, velocity);
 		// リストに追加
 		particles_.push_back(particle);
 	}
