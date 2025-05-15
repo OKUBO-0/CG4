@@ -1,6 +1,11 @@
 #include "GameScene.h"
+#include <random>
 
 using namespace KamataEngine;
+
+std::random_device seedGenerator;
+std::mt19937 randomEngine(seedGenerator());
+std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 // コンストラクタ
 GameScene::GameScene() {
@@ -26,7 +31,9 @@ void GameScene::Initialize() {
 	// エフェクト
 	modelEffect_ = Model::CreateFromOBJ("effect");
 	effect_ = new Effect();
-	effect_->Initialize(modelEffect_);
+	Vector3 scale = { 1.0f, abs(distribution(randomEngine)), 1.0f };
+	Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
+	effect_->Initialize(modelEffect_, scale, rotation);
 }
 
 void GameScene::Update() {

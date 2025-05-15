@@ -5,7 +5,7 @@ class Effect
 {
 public:
 	// 初期化
-	void Initialize(KamataEngine::Model* model);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Vector3 scale, KamataEngine::Vector3 rotation);
 
 	// 更新
 	void Update();
