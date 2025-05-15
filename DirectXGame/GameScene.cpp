@@ -38,11 +38,6 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	// パーティクル
-	for (Particle* particle : particles_) {
-		particle->Update();
-	}
-
 	// 終了フラグの立ったパーティクルを削除
 	particles_.remove_if([](Particle* particle) {
 		if (particle->IsFinished()) {
@@ -58,6 +53,11 @@ void GameScene::Update() {
 		Vector3 position = { Distribution(randomEngine) * 30.0f, Distribution(randomEngine) * 20.0f, 0 };
 		// パーティクルの生成
 		ParticleBorn(position);
+	}
+
+	// パーティクル
+	for (Particle* particle : particles_) {
+		particle->Update();
 	}
 }
 
