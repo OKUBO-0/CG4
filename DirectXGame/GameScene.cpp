@@ -8,7 +8,8 @@ GameScene::GameScene() {
 
 // デストラクタ
 GameScene::~GameScene() {
-
+	delete modelEffect_;
+	delete effect_;
 }
 
 void GameScene::Initialize() {
@@ -21,10 +22,16 @@ void GameScene::Initialize() {
 
 	// カメラ
 	camera_.Initialize();
+
+	// エフェクト
+	modelEffect_ = Model::CreateFromOBJ("effect");
+	effect_ = new Effect();
+	effect_->Initialize(modelEffect_);
 }
 
 void GameScene::Update() {
-
+	// エフェクトの更新
+	effect_->Update();
 }
 
 void GameScene::Draw() {
@@ -34,7 +41,8 @@ void GameScene::Draw() {
 	// 3Dモデル描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
 
-
+	// エフェクトの描画
+	effect_->Draw(camera_);
 
 	// 3Dモデル描画後処理
 	Model::PostDraw();
