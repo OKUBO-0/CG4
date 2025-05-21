@@ -17,6 +17,9 @@ public:
 	// 更新
 	void Update();
 
+	// エフェクト発生
+	void EffectBorn(KamataEngine::Vector3 position);
+
 	// 描画
 	void Draw();
 

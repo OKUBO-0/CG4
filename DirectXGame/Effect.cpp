@@ -3,7 +3,7 @@
 
 using namespace KamataEngine;
 
-void Effect::Initialize(Model* model, Vector3 scale, Vector3 rotation) {
+void Effect::Initialize(Model* model, Vector3 scale, Vector3 rotation, Vector3 position) {
 	// NULLポインタチェック
 	assert(model);
 	model_ = model;
@@ -14,9 +14,10 @@ void Effect::Initialize(Model* model, Vector3 scale, Vector3 rotation) {
 
 	// 大きさ
 	worldTransform_.scale_ = scale;
-
 	// 回転
 	worldTransform_.rotation_ = rotation;
+	// 位置
+	worldTransform_.translation_ = position;
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();

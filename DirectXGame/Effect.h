@@ -5,7 +5,7 @@ class Effect
 {
 public:
 	// 初期化
-	void Initialize(KamataEngine::Model* model, KamataEngine::Vector3 scale, KamataEngine::Vector3 rotation);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Vector3 scale, KamataEngine::Vector3 rotation, KamataEngine::Vector3 position);
 
 	// 更新
 	void Update();
@@ -14,7 +14,7 @@ public:
 	void Draw(KamataEngine::Camera& camera);
 
 	// デスフラグ
-	bool IsFinished() { return isFinished_; }
+	bool IsFinished() const { return isFinished_; }
 
 private:
 	// ワールド変換行列

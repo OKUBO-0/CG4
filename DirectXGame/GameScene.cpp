@@ -27,29 +27,17 @@ void GameScene::Initialize() {
 	// Audioインスタンスの取得
 	audio_ = Audio::GetInstance();
 
-	// カメラ
-	camera_.Initialize();
-
 	// 乱数の初期化
 	srand((unsigned)time(NULL));
 
+	// カメラ
+	camera_.Initialize();
+
 	// エフェクト
 	modelEffect_ = Model::CreateFromOBJ("effect");
-	for (int i = 0; i < 5; i++) {
-		Effect* effect_ = new Effect();
-		Vector3 scale = { 0.5f, 5.0f + abs(distribution(randomEngine)), 1.0f };
-		Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
-		effect_->Initialize(modelEffect_, scale, rotation);
-		effects_.push_back(effect_);
-	}
 }
 
 void GameScene::Update() {
-	// エフェクトの更新
-	for (Effect* effect : effects_) {
-		effect->Update();
-	}
-
 	// 終了フラグの立ったエフェクトを削除
 	effects_.remove_if([](Effect* effect) {
 		if (effect->IsFinished()) {
@@ -58,6 +46,35 @@ void GameScene::Update() {
 		}
 		return false;
 		});
+
+	// 確率で発生
+	if (rand() % 20 == 0) {
+		// 発生位置は乱数
+		Vector3 position = { distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0 };
+		// パーティクルの生成
+		EffectBorn(position);
+	}
+
+	// エフェクトの更新
+	for (Effect* effect : effects_) {
+		effect->Update();
+	}
+}
+
+// エフェクト発生
+void GameScene::EffectBorn(Vector3 position) {
+	for (int i = 0; i < 5; i++) {
+		// 生成
+		Effect* effect_ = new Effect();
+		// 大きさ
+		Vector3 scale = { 0.5f, 5.0f + abs(distribution(randomEngine)), 1.0f };
+		// 回転
+		Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
+		// 初期化
+		effect_->Initialize(modelEffect_, scale, rotation, position);
+		// リストに追加
+		effects_.push_back(effect_);
+	}
 }
 
 void GameScene::Draw() {
