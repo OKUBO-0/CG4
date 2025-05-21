@@ -2,6 +2,7 @@
 #include <algorithm>
 
 using namespace KamataEngine;
+using namespace MathUtility;
 
 void Effect::Initialize(Model* model, Vector3 scale, Vector3 rotation, Vector3 position) {
 	// NULLポインタチェック
@@ -10,7 +11,7 @@ void Effect::Initialize(Model* model, Vector3 scale, Vector3 rotation, Vector3 p
 
 	// 色の設定
 	objectColor_.Initialize();
-	color_ = { 1.0f, 0.0f, 0.0f, 1.0f };
+	color_ = {1.0f, 0.0f, 0.0f, 1.0f};
 
 	// 大きさ
 	worldTransform_.scale_ = scale;
@@ -19,7 +20,7 @@ void Effect::Initialize(Model* model, Vector3 scale, Vector3 rotation, Vector3 p
 	// 位置
 	worldTransform_.translation_ = position;
 
-	//ワールド変換の初期化
+	// ワールド変換の初期化
 	worldTransform_.Initialize();
 }
 
@@ -42,11 +43,21 @@ void Effect::Update() {
 	// フェード処理
 	color_.w = std::clamp(1.0f - counter_ / kDuration, 0.0f, 1.0f);
 
-	// ワールド変換行列の更新
-	worldTransform_.UpdateMatrix();
+	// サイズ
+	worldTransform_.scale_ -= {0.1f, 0.1f, 0.0f};
+	// サイズが0以下になったら
+	if (worldTransform_.scale_.x <= 0.0f) {
+		worldTransform_.scale_ = {0.0f, 0.0f, 0.0f};
+	}
+
+	// 移動
+	worldTransform_.translation_ += {0.0f, 0.5f, 0.0f};
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
+
+	// 行列を更新
+	worldTransform_.UpdateMatrix();
 }
 
 void Effect::Draw(Camera& camera) {

@@ -34,7 +34,7 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 
 	// エフェクト
-	modelEffect_ = Model::CreateFromOBJ("effect");
+	modelEffect_ = Model::CreateFromOBJ("fireEffect");
 }
 
 void GameScene::Update() {
@@ -48,9 +48,9 @@ void GameScene::Update() {
 		});
 
 	// 確率で発生
-	if (rand() % 20 == 0) {
+	if (rand() % 1 == 0) {
 		// 発生位置は乱数
-		Vector3 position = { distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0 };
+		Vector3 position = { distribution(randomEngine) * 3.0f, distribution(randomEngine) * 3.0f, 0.0f };
 		// パーティクルの生成
 		EffectBorn(position);
 	}
@@ -63,13 +63,13 @@ void GameScene::Update() {
 
 // エフェクト発生
 void GameScene::EffectBorn(Vector3 position) {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 1; i++) {
 		// 生成
 		Effect* effect_ = new Effect();
 		// 大きさ
-		Vector3 scale = { 0.5f, 5.0f + abs(distribution(randomEngine)), 1.0f };
+		Vector3 scale = { 5.0f, 5.0f, 1.0f };
 		// 回転
-		Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
+		Vector3 rotation = { 0.0f, 0.0f, 0.0f };
 		// 初期化
 		effect_->Initialize(modelEffect_, scale, rotation, position);
 		// リストに追加
