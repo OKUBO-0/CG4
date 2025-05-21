@@ -30,5 +30,5 @@ private:
 
 	// エフェクト
 	KamataEngine::Model* modelEffect_ = nullptr;
-	Effect* effect_ = nullptr;
+	std::list<Effect*> effects_;
 };

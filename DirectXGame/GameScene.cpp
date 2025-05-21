@@ -14,7 +14,9 @@ GameScene::GameScene() {
 // デストラクタ
 GameScene::~GameScene() {
 	delete modelEffect_;
-	delete effect_;
+	for (Effect* effect : effects_) {
+		delete effect;
+	}
 }
 
 void GameScene::Initialize() {
@@ -28,17 +30,25 @@ void GameScene::Initialize() {
 	// カメラ
 	camera_.Initialize();
 
+	// 乱数の初期化
+	srand((unsigned)time(NULL));
+
 	// エフェクト
 	modelEffect_ = Model::CreateFromOBJ("effect");
-	effect_ = new Effect();
-	Vector3 scale = { 1.0f, abs(distribution(randomEngine)), 1.0f };
-	Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
-	effect_->Initialize(modelEffect_, scale, rotation);
+	for (int i = 0; i < 5; i++) {
+		Effect* effect_ = new Effect();
+		Vector3 scale = { 0.5f, 5.0f + abs(distribution(randomEngine)), 1.0f };
+		Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
+		effect_->Initialize(modelEffect_, scale, rotation);
+		effects_.push_back(effect_);
+	}
 }
 
 void GameScene::Update() {
 	// エフェクトの更新
-	effect_->Update();
+	for (Effect* effect : effects_) {
+		effect->Update();
+	}
 }
 
 void GameScene::Draw() {
@@ -49,7 +59,9 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	// エフェクトの描画
-	effect_->Draw(camera_);
+	for (Effect* effect : effects_) {
+		effect->Draw(camera_);
+	}
 
 	// 3Dモデル描画後処理
 	Model::PostDraw();
