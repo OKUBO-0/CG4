@@ -2,6 +2,7 @@
 #include <random>
 
 using namespace KamataEngine;
+using namespace MathUtility;
 
 std::random_device seedGenerator;
 std::mt19937 randomEngine(seedGenerator());
@@ -63,11 +64,14 @@ void GameScene::Update() {
 
 // パーティクル発生
 void GameScene::ParticleBorn(Vector3 position) {
-	for (int i = 0; i < 150; i++) {
+	for (int i = 0; i < 100; i++) {
 		// 生成
 		Particle* particle = new Particle();
 		// 速度
 		Vector3 velocity = { Distribution(randomEngine), Distribution(randomEngine), 0 };
+		Normalize(velocity);
+		velocity *= Distribution(randomEngine);
+		velocity *= 0.1f;
 		// 初期化
 		particle->Initialize(modelParticle_, position, velocity);
 		// リストに追加
