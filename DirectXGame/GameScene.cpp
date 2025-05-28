@@ -39,7 +39,7 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 
 	// エフェクト
-	modelEffect_ = Model::CreateFromOBJ("effect");
+	modelEffect_ = Model::CreateFromOBJ("circleEffect");
 	modelEffect2_ = Model::CreateFromOBJ("effect");
 }
 
@@ -54,7 +54,7 @@ void GameScene::Update() {
 		});
 
 	// ランダム位置に円を生成
-	if (rand() % 50 == 0) {
+	if (rand() % 20 == 0) {
 		Vector3 center = { distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0 };
 		EffectBorn(center); // 中心座標を渡す
 	}
@@ -67,30 +67,39 @@ void GameScene::Update() {
 
 // エフェクト発生
 void GameScene::EffectBorn(Vector3 center) {
-	const int numEffects = 10;        // 配置する個数
-	const float radius = 6.0f;      // 円の半径
+	const int numCircleEffects = 50;     // 円周上に配置する個数
+	const int numVerticalEffects = 7;   // 縦に伸びるエフェクトの個数
+	const float radius = 5.0f;         // 配置半径
 
-	for (int i = 0; i < numEffects; i++) {
-		float angle = (2.0f * 3.1415926f / numEffects) * i; // 等間隔の角度
+	// 円周上のエフェクト
+	for (int i = 0; i < numCircleEffects; i++) {
+		float angle = (2.0f * 3.1415926f / numCircleEffects) * i;
 		Vector3 position = {
 			center.x + std::cos(angle) * radius,
 			center.y + std::sin(angle) * radius,
 			center.z
 		};
 
-		// エフェクト生成
 		Effect* effect_ = new Effect();
-		Vector3 scale = { 0.1f, 2.0f, 1.0f };
-		Vector3 rotation = { 0.0f, 0.0f, angle }; // 角度に応じて回転を変えても良い
+		Vector3 scale = { 0.1f, 0.2f + std::abs(distribution(randomEngine)), 1.0f };
+		Vector3 rotation = { 0.0f, 0.0f, angle };
 		effect_->Initialize(modelEffect_, scale, rotation, position);
 		effects_.push_back(effect_);
+	}
 
-		// 円周上に被せる縦に伸びたエフェクト
+	// 縦に伸びるエフェクト（個数と位置を別に制御）
+	for (int i = 0; i < numVerticalEffects; i++) {
+		float angle = (2.0f * 3.1415926f / numVerticalEffects) * i;
+		Vector3 position = {
+			center.x + std::cos(angle) * radius,
+			center.y + std::sin(angle) * radius,
+			center.z
+		};
+
 		Effect* verticalEffect = new Effect();
-		Vector3 verticalScale = { 2.0f + distribution(randomEngine), 0.1f, 1.0f };
-		Vector3 verticalRotation = { 0.0f, 0.0f, angle };
-		Vector3 verticalPosition = position;
-		verticalEffect->Initialize(modelEffect_, verticalScale, verticalRotation, verticalPosition);
+		Vector3 scale = { 2.0f + distribution(randomEngine), 0.1f, 1.0f }; // より縦に長い
+		Vector3 rotation = { 0.0f, 0.0f, angle };
+		verticalEffect->Initialize(modelEffect2_, scale, rotation, position);
 		effects_.push_back(verticalEffect);
 	}
 }
