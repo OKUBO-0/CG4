@@ -18,7 +18,7 @@ public:
 	void Update();
 
 	// エフェクト発生
-	void EffectBorn(KamataEngine::Vector3 position);
+	void EffectBorn(KamataEngine::Vector3 center);
 
 	// 描画
 	void Draw();
@@ -34,4 +34,7 @@ private:
 	// エフェクト
 	KamataEngine::Model* modelEffect_ = nullptr;
 	std::list<Effect*> effects_;
+
+	KamataEngine::Model* modelEffect2_ = nullptr;
+	std::list<Effect*> effects2_;
 };

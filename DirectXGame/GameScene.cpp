@@ -17,6 +17,11 @@ GameScene::~GameScene() {
 	for (Effect* effect : effects_) {
 		delete effect;
 	}
+
+	delete modelEffect2_;
+	for (Effect* effect : effects2_) {
+		delete effect;
+	}
 }
 
 void GameScene::Initialize() {
@@ -35,6 +40,7 @@ void GameScene::Initialize() {
 
 	// エフェクト
 	modelEffect_ = Model::CreateFromOBJ("effect");
+	modelEffect2_ = Model::CreateFromOBJ("effect");
 }
 
 void GameScene::Update() {
@@ -47,12 +53,10 @@ void GameScene::Update() {
 		return false;
 		});
 
-	// 確率で発生
-	if (rand() % 20 == 0) {
-		// 発生位置は乱数
-		Vector3 position = { distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0 };
-		// パーティクルの生成
-		EffectBorn(position);
+	// ランダム位置に円を生成
+	if (rand() % 50 == 0) {
+		Vector3 center = { distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0 };
+		EffectBorn(center); // 中心座標を渡す
 	}
 
 	// エフェクトの更新
@@ -62,18 +66,32 @@ void GameScene::Update() {
 }
 
 // エフェクト発生
-void GameScene::EffectBorn(Vector3 position) {
-	for (int i = 0; i < 5; i++) {
-		// 生成
+void GameScene::EffectBorn(Vector3 center) {
+	const int numEffects = 10;        // 配置する個数
+	const float radius = 6.0f;      // 円の半径
+
+	for (int i = 0; i < numEffects; i++) {
+		float angle = (2.0f * 3.1415926f / numEffects) * i; // 等間隔の角度
+		Vector3 position = {
+			center.x + std::cos(angle) * radius,
+			center.y + std::sin(angle) * radius,
+			center.z
+		};
+
+		// エフェクト生成
 		Effect* effect_ = new Effect();
-		// 大きさ
-		Vector3 scale = { 0.5f, 5.0f + abs(distribution(randomEngine)), 1.0f };
-		// 回転
-		Vector3 rotation = { 0.0f, 0.0f, distribution(randomEngine) };
-		// 初期化
+		Vector3 scale = { 0.1f, 2.0f, 1.0f };
+		Vector3 rotation = { 0.0f, 0.0f, angle }; // 角度に応じて回転を変えても良い
 		effect_->Initialize(modelEffect_, scale, rotation, position);
-		// リストに追加
 		effects_.push_back(effect_);
+
+		// 円周上に被せる縦に伸びたエフェクト
+		Effect* verticalEffect = new Effect();
+		Vector3 verticalScale = { 2.0f + distribution(randomEngine), 0.1f, 1.0f };
+		Vector3 verticalRotation = { 0.0f, 0.0f, angle };
+		Vector3 verticalPosition = position;
+		verticalEffect->Initialize(modelEffect_, verticalScale, verticalRotation, verticalPosition);
+		effects_.push_back(verticalEffect);
 	}
 }
 
