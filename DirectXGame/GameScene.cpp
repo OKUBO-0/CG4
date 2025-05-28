@@ -8,7 +8,8 @@ GameScene::GameScene() {
 
 // デストラクタ
 GameScene::~GameScene() {
-
+	// モデル2
+	Model2::StaticFinalize();
 }
 
 void GameScene::Initialize() {
@@ -21,6 +22,9 @@ void GameScene::Initialize() {
 
 	// カメラ
 	camera_.Initialize();
+
+	// モデル2
+	Model2::StaticInitialize();
 }
 
 void GameScene::Update() {
@@ -32,10 +36,10 @@ void GameScene::Draw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
 	// 3Dモデル描画前処理
-	Model::PreDraw(dxCommon->GetCommandList());
+	Model2::PreDraw(dxCommon->GetCommandList());
 
 
 
 	// 3Dモデル描画後処理
-	Model::PostDraw();
+	Model2::PostDraw();
 }
