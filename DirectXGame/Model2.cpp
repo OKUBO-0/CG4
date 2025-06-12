@@ -1,19 +1,19 @@
-//#include <3d\Model.h>
+// #include <3d\Model.h>
+#include "Model2.h"
 #include <3d\Camera.h>
-#include <base\DirectXCommon.h>
 #include <3d\Material.h>
-#include <math\MathUtility.h>
-#include <base\StringUtility.h>
-#include <base\TextureManager.h>
 #include <3d\WorldTransform.h>
 #include <algorithm>
+#include <base\DirectXCommon.h>
+#include <base\StringUtility.h>
+#include <base\TextureManager.h>
 #include <cassert>
 #include <d3dcompiler.h>
 #include <format>
 #include <fstream>
+#include <math\MathUtility.h>
 #include <numbers>
 #include <sstream>
-#include "Model2.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -49,16 +49,16 @@ Model2* Model2::CreateFromOBJ(const std::string& modelname, bool smoothing) {
 	return instance;
 }
 
-Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizontal) {
+Model2* Model2::CreateSphere(uint32_t divisionVertical, uint32_t divisionHorizontal) {
 	// メモリ確保
 	Model2* instance = new Model2;
 	std::vector<Mesh::VertexPosNormalUv> vertices;
 	std::vector<uint32_t> indices;
 
 	// 頂点数
-	const uint32_t kNumSphereVertices = divisionVertial * divisionHorizontal * 4;
+	const uint32_t kNumSphereVertices = divisionVertical * divisionHorizontal * 4;
 	// インデックス数
-	const uint32_t kNumSphereIndices = divisionVertial * divisionHorizontal * 6;
+	const uint32_t kNumSphereIndices = divisionVertical * divisionHorizontal * 6;
 
 	vertices.resize(kNumSphereVertices);
 	indices.resize(kNumSphereIndices);
@@ -68,11 +68,11 @@ Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizont
 	// 経度分割1つ分の角度
 	const float kLonEvery = pi * 2.0f / float(divisionHorizontal);
 	// 緯度分割1つ分の角度
-	const float kLatEvery = pi / float(divisionVertial);
+	const float kLatEvery = pi / float(divisionVertical);
 
 	// 座標計算
 	// 緯度の方向に分割
-	for (uint32_t latIndex = 0; latIndex < divisionVertial; ++latIndex) {
+	for (uint32_t latIndex = 0; latIndex < divisionVertical; ++latIndex) {
 		float lat = -pi / 2.0f + kLatEvery * latIndex;
 		// 経度の方向に分割しながら線を描く
 		for (uint32_t lonIndex = 0; lonIndex < divisionHorizontal; ++lonIndex) {
@@ -82,28 +82,28 @@ Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizont
 			vertices[startIndex].pos.x = std::cos(lat) * std::cos(lon);
 			vertices[startIndex].pos.y = std::sin(lat);
 			vertices[startIndex].pos.z = std::cos(lat) * std::sin(lon);
-			vertices[startIndex].uv = {float(lonIndex) / float(divisionHorizontal), 1.0f - float(latIndex) / float(divisionVertial)};
+			vertices[startIndex].uv = {float(lonIndex) / float(divisionHorizontal), 1.0f - float(latIndex) / float(divisionVertical)};
 			vertices[startIndex].normal = vertices[startIndex].pos;
 			vertices[startIndex].normal = MathUtility::Normalize(vertices[startIndex].normal);
 			// 左上
 			vertices[startIndex + 1].pos.x = std::cos(lat + kLatEvery) * std::cos(lon);
 			vertices[startIndex + 1].pos.y = std::sin(lat + kLatEvery);
 			vertices[startIndex + 1].pos.z = std::cos(lat + kLatEvery) * std::sin(lon);
-			vertices[startIndex + 1].uv = {float(lonIndex) / float(divisionHorizontal), 1.0f - float(latIndex + 1) / float(divisionVertial)};
+			vertices[startIndex + 1].uv = {float(lonIndex) / float(divisionHorizontal), 1.0f - float(latIndex + 1) / float(divisionVertical)};
 			vertices[startIndex + 1].normal = vertices[startIndex + 1].pos;
 			vertices[startIndex + 1].normal = MathUtility::Normalize(vertices[startIndex + 1].normal);
 			// 右下
 			vertices[startIndex + 2].pos.x = std::cos(lat) * std::cos(lon + kLonEvery);
 			vertices[startIndex + 2].pos.y = std::sin(lat);
 			vertices[startIndex + 2].pos.z = std::cos(lat) * std::sin(lon + kLonEvery);
-			vertices[startIndex + 2].uv = {float(lonIndex + 1) / float(divisionHorizontal), 1.0f - float(latIndex) / float(divisionVertial)};
+			vertices[startIndex + 2].uv = {float(lonIndex + 1) / float(divisionHorizontal), 1.0f - float(latIndex) / float(divisionVertical)};
 			vertices[startIndex + 2].normal = vertices[startIndex + 2].pos;
 			vertices[startIndex + 2].normal = MathUtility::Normalize(vertices[startIndex + 2].normal);
 			// 右上
 			vertices[startIndex + 3].pos.x = std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery);
 			vertices[startIndex + 3].pos.y = std::sin(lat + kLatEvery);
 			vertices[startIndex + 3].pos.z = std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery);
-			vertices[startIndex + 3].uv = {float(lonIndex + 1) / float(divisionHorizontal), 1.0f - float(latIndex + 1) / float(divisionVertial)};
+			vertices[startIndex + 3].uv = {float(lonIndex + 1) / float(divisionHorizontal), 1.0f - float(latIndex + 1) / float(divisionVertical)};
 			vertices[startIndex + 3].normal = vertices[startIndex + 3].pos;
 			vertices[startIndex + 3].normal = MathUtility::Normalize(vertices[startIndex + 3].normal);
 		}
@@ -111,7 +111,7 @@ Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizont
 
 	// インデックス計算
 	// 緯度の方向に分割
-	for (uint32_t latIndex = 0; latIndex < divisionVertial; ++latIndex) {
+	for (uint32_t latIndex = 0; latIndex < divisionVertical; ++latIndex) {
 		// 経度の方向に分割しながら線を描く
 		for (uint32_t lonIndex = 0; lonIndex < divisionHorizontal; ++lonIndex) {
 			uint32_t startIndex = (latIndex * divisionHorizontal + lonIndex) * 6;
@@ -125,6 +125,51 @@ Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizont
 			indices[startIndex + 5] = startIndexVertices + 3;
 		}
 	}
+
+	instance->InitializeFromVertices(vertices, indices);
+
+	return instance;
+}
+
+Model2* Model2::CreateSquare() {
+	// メモリ開放
+	Model2* instance = new Model2;
+	std::vector<Mesh::VertexPosNormalUv> vertices;
+	std::vector<uint32_t> indices;
+
+	// 頂点数
+	const uint32_t kNumVertices = 4;
+	// インデックス数
+	const uint32_t kNumIndices = 6;
+
+	vertices.resize(kNumVertices);
+	indices.resize(kNumIndices);
+
+	const float kSquareLength = 5.0f;
+	// 左下
+	vertices[0].pos = { -kSquareLength, -kSquareLength, 0.0f };
+	vertices[0].uv = { 0.0f, 1.0f };
+	vertices[0].normal = { 0.0f, 0.0f, 1.0f };
+	// 左上
+	vertices[1].pos = { -kSquareLength, kSquareLength, 0.0f };
+	vertices[1].uv = { 0.0f, 0.0f };
+	vertices[1].normal = { 0.0f, 0.0f, 1.0f };
+	// 右下
+	vertices[2].pos = { kSquareLength, -kSquareLength, 0.0f };
+	vertices[2].uv = { 1.0f, 1.0f };
+	vertices[2].normal = { 0.0f, 0.0f, 1.0f };
+	// 右上
+	vertices[3].pos = { kSquareLength, kSquareLength, 0.0f };
+	vertices[3].uv = { 1.0f, 0.0f };
+	vertices[3].normal = { 0.0f, 0.0f, 1.0f };
+
+	// インデックス
+	indices[0] = 0; // 左下
+	indices[1] = 1; // 左上
+	indices[2] = 2; // 右下
+	indices[3] = 2; // 右下
+	indices[4] = 1; // 左上
+	indices[5] = 3; // 右上
 
 	instance->InitializeFromVertices(vertices, indices);
 
@@ -748,22 +793,19 @@ void ModelCommon2::InitializeGraphicsPipeline() {
 	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 
 	// 加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;
+	// blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	// blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	// blenddesc.DestBlend = D3D12_BLEND_ONE;
 
-	//減算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	//blenddesc.DestBlend = D3D12_BLEND_ONE
+	// 減算合成
+	// blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+	// blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	// blenddesc.DestBlend = D3D12_BLEND_ONE
 
 	// 共通設定
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-
-
-
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;

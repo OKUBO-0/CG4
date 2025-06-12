@@ -32,7 +32,7 @@ void GameScene::Initialize() {
 
 	// モデル2
 	Model2::StaticInitialize();
-	model_ = Model2::Create();
+	model_ = Model2::CreateSquare();
 }
 
 void GameScene::Update() {

@@ -132,10 +132,16 @@ public: // 静的メンバ関数
 	/// <summary>
 	/// 球モデル生成
 	/// </summary>
-	/// <param name="divisionVertial">垂直方向（緯度）分割数</param>
+	/// <param name="divisionVertical">垂直方向（緯度）分割数</param>
 	/// <param name="divisionHorizontal">水平方向（経度）分割数</param>
 	/// <returns>生成されたモデル</returns>
-	static Model2* CreateSphere(uint32_t divisionVertial = 10, uint32_t divisionHorizontal = 10);
+	static Model2* CreateSphere(uint32_t divisionVertical = 10, uint32_t divisionHorizontal = 10);
+
+	/// <summary>
+	/// 四角形モデル生成
+	/// </summary>
+	/// <returns>生成されたモデル</returns>
+	static Model2* CreateSquare();
 
 	/// <summary>
 	/// 描画前処理
