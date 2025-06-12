@@ -25,6 +25,15 @@ private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::Audio* audio_ = nullptr;
 
+	// ワールドトランスフォーム
+	KamataEngine::WorldTransform worldTransform_;
+
 	// カメラ
 	KamataEngine::Camera camera_;
+
+	// テクスチャハンドル
+	uint32_t textureHandle_ = 0;
+
+	// モデル
+	KamataEngine::Model2* model_ = nullptr;
 };

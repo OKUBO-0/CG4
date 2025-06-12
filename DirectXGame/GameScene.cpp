@@ -10,6 +10,7 @@ GameScene::GameScene() {
 GameScene::~GameScene() {
 	// モデル2
 	Model2::StaticFinalize();
+	delete model_;
 }
 
 void GameScene::Initialize() {
@@ -20,11 +21,18 @@ void GameScene::Initialize() {
 	// Audioインスタンスの取得
 	audio_ = Audio::GetInstance();
 
+	// ワールドトランスフォーム
+	worldTransform_.Initialize();
+
 	// カメラ
 	camera_.Initialize();
 
+	// テクスチャ
+	textureHandle_ = TextureManager::Load("uvChecker.png");
+
 	// モデル2
 	Model2::StaticInitialize();
+	model_ = Model2::Create();
 }
 
 void GameScene::Update() {
@@ -38,7 +46,8 @@ void GameScene::Draw() {
 	// 3Dモデル描画前処理
 	Model2::PreDraw(dxCommon->GetCommandList());
 
-
+	// モデル2
+	model_->Draw(worldTransform_, camera_, textureHandle_);
 
 	// 3Dモデル描画後処理
 	Model2::PostDraw();
