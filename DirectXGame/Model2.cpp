@@ -131,45 +131,55 @@ Model2* Model2::CreateSphere(uint32_t divisionVertical, uint32_t divisionHorizon
 	return instance;
 }
 
-Model2* Model2::CreateSquare() {
+Model2* Model2::CreateSquare(uint32_t count) {
 	// メモリ開放
 	Model2* instance = new Model2;
 	std::vector<Mesh::VertexPosNormalUv> vertices;
 	std::vector<uint32_t> indices;
 
 	// 頂点数
-	const uint32_t kNumVertices = 4;
+	const uint32_t kNumVertices = 4 * count;
 	// インデックス数
-	const uint32_t kNumIndices = 6;
+	const uint32_t kNumIndices = 6 * count;
+	// 長さ
+	const float kSquareLength = 5.0f;
 
 	vertices.resize(kNumVertices);
 	indices.resize(kNumIndices);
 
-	const float kSquareLength = 5.0f;
-	// 左下
-	vertices[0].pos = { -kSquareLength, -kSquareLength, 0.0f };
-	vertices[0].uv = { 0.0f, 1.0f };
-	vertices[0].normal = { 0.0f, 0.0f, 1.0f };
-	// 左上
-	vertices[1].pos = { -kSquareLength, kSquareLength, 0.0f };
-	vertices[1].uv = { 0.0f, 0.0f };
-	vertices[1].normal = { 0.0f, 0.0f, 1.0f };
-	// 右下
-	vertices[2].pos = { kSquareLength, -kSquareLength, 0.0f };
-	vertices[2].uv = { 1.0f, 1.0f };
-	vertices[2].normal = { 0.0f, 0.0f, 1.0f };
-	// 右上
-	vertices[3].pos = { kSquareLength, kSquareLength, 0.0f };
-	vertices[3].uv = { 1.0f, 0.0f };
-	vertices[3].normal = { 0.0f, 0.0f, 1.0f };
+	float offsetStep = kSquareLength * 2.0f;
+	float start = -offsetStep * (count - 1) / 2.0f;
 
-	// インデックス
-	indices[0] = 0; // 左下
-	indices[1] = 1; // 左上
-	indices[2] = 2; // 右下
-	indices[3] = 2; // 右下
-	indices[4] = 1; // 左上
-	indices[5] = 3; // 右上
+	for (uint32_t i = 0; i < count; ++i) {
+
+		float offset = start + static_cast<float>(i) * offsetStep;
+		uint32_t vertexIndex = i * 4;
+
+		// 左下
+		vertices[vertexIndex + 0].pos = { -kSquareLength + offset, -kSquareLength, 0.0f };
+		vertices[0].uv = { 0.0f, 1.0f };
+		// 左上
+		vertices[vertexIndex + 1].pos = { -kSquareLength + offset, kSquareLength, 0.0f };
+		vertices[1].uv = { 0.0f, 0.0f };
+		// 右下
+		vertices[vertexIndex + 2].pos = { kSquareLength + offset, -kSquareLength, 0.0f };
+		vertices[2].uv = { 1.0f, 1.0f };
+		// 右上
+		vertices[vertexIndex + 3].pos = { kSquareLength + offset, kSquareLength, 0.0f };
+		vertices[3].uv = { 1.0f, 0.0f };
+
+		for (int j = 0; j < 4; ++j) {
+			vertices[vertexIndex + j].normal = { 0.0f, 0.0f, 1.0f };
+		}
+
+		uint32_t indexBufferIndex = i * 6;
+		indices[indexBufferIndex + 0] = vertexIndex + 0;
+		indices[indexBufferIndex + 1] = vertexIndex + 1;
+		indices[indexBufferIndex + 2] = vertexIndex + 2;
+		indices[indexBufferIndex + 3] = vertexIndex + 2;
+		indices[indexBufferIndex + 4] = vertexIndex + 1;
+		indices[indexBufferIndex + 5] = vertexIndex + 3;
+	}
 
 	instance->InitializeFromVertices(vertices, indices);
 
