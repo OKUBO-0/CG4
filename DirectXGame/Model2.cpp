@@ -131,56 +131,54 @@ Model2* Model2::CreateSphere(uint32_t divisionVertical, uint32_t divisionHorizon
 	return instance;
 }
 
-Model2* Model2::CreateSquare(uint32_t count) {
-	// メモリ開放
+Model2* Model2::CreateSquare(uint32_t squareCount) {
+	// メモリ確保
 	Model2* instance = new Model2;
 	std::vector<Mesh::VertexPosNormalUv> vertices;
 	std::vector<uint32_t> indices;
 
-	// 頂点数
-	const uint32_t kNumVertices = 4 * count;
-	// インデックス数
-	const uint32_t kNumIndices = 6 * count;
-	// 長さ
-	const float kSquareLength = 5.0f;
+	const float kSquareLength = 3.0f;
+	const uint32_t kVerticesPerSquare = 4;
+	const uint32_t kIndicesPerSquare = 6;
 
-	vertices.resize(kNumVertices);
-	indices.resize(kNumIndices);
+	// 全体のサイズを確保
+	vertices.resize(squareCount * kVerticesPerSquare);
+	indices.resize(squareCount * kIndicesPerSquare);
 
-	float offsetStep = kSquareLength * 2.0f;
-	float start = -offsetStep * (count - 1) / 2.0f;
+	for (uint32_t i = 0; i < squareCount; ++i) {
+		uint32_t vIndex = i * kVerticesPerSquare;
+		uint32_t iIndex = i * kIndicesPerSquare;
 
-	for (uint32_t i = 0; i < count; ++i) {
+		// X軸方向にオフセット
+		float offsetX = static_cast<float>(i) * kSquareLength * 2.0f;
 
-		float offset = start + static_cast<float>(i) * offsetStep;
-		uint32_t vertexIndex = i * 4;
+		// 頂点設定
+		vertices[vIndex + 0].pos = { -kSquareLength + offsetX, -kSquareLength, 0.0f };
+		vertices[vIndex + 0].uv = { 0.0f, 1.0f };
+		vertices[vIndex + 0].normal = { 0.0f, 0.0f, -1.0f };
 
-		// 左下
-		vertices[vertexIndex + 0].pos = { -kSquareLength + offset, -kSquareLength, 0.0f };
-		vertices[0].uv = { 0.0f, 1.0f };
-		// 左上
-		vertices[vertexIndex + 1].pos = { -kSquareLength + offset, kSquareLength, 0.0f };
-		vertices[1].uv = { 0.0f, 0.0f };
-		// 右下
-		vertices[vertexIndex + 2].pos = { kSquareLength + offset, -kSquareLength, 0.0f };
-		vertices[2].uv = { 1.0f, 1.0f };
-		// 右上
-		vertices[vertexIndex + 3].pos = { kSquareLength + offset, kSquareLength, 0.0f };
-		vertices[3].uv = { 1.0f, 0.0f };
+		vertices[vIndex + 1].pos = { -kSquareLength + offsetX,  kSquareLength, 0.0f };
+		vertices[vIndex + 1].uv = { 0.0f, 0.0f };
+		vertices[vIndex + 1].normal = { 0.0f, 0.0f, -1.0f };
 
-		for (int j = 0; j < 4; ++j) {
-			vertices[vertexIndex + j].normal = { 0.0f, 0.0f, 1.0f };
-		}
+		vertices[vIndex + 2].pos = { kSquareLength + offsetX, -kSquareLength, 0.0f };
+		vertices[vIndex + 2].uv = { 1.0f, 1.0f };
+		vertices[vIndex + 2].normal = { 0.0f, 0.0f, -1.0f };
 
-		uint32_t indexBufferIndex = i * 6;
-		indices[indexBufferIndex + 0] = vertexIndex + 0;
-		indices[indexBufferIndex + 1] = vertexIndex + 1;
-		indices[indexBufferIndex + 2] = vertexIndex + 2;
-		indices[indexBufferIndex + 3] = vertexIndex + 2;
-		indices[indexBufferIndex + 4] = vertexIndex + 1;
-		indices[indexBufferIndex + 5] = vertexIndex + 3;
+		vertices[vIndex + 3].pos = { kSquareLength + offsetX,  kSquareLength, 0.0f };
+		vertices[vIndex + 3].uv = { 1.0f, 0.0f };
+		vertices[vIndex + 3].normal = { 0.0f, 0.0f, -1.0f };
+
+		// インデックス設定（三角形2枚）
+		indices[iIndex + 0] = vIndex + 0;
+		indices[iIndex + 1] = vIndex + 1;
+		indices[iIndex + 2] = vIndex + 2;
+		indices[iIndex + 3] = vIndex + 2;
+		indices[iIndex + 4] = vIndex + 1;
+		indices[iIndex + 5] = vIndex + 3;
 	}
 
+	// 頂点とインデックスで初期化
 	instance->InitializeFromVertices(vertices, indices);
 
 	return instance;

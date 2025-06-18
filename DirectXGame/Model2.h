@@ -141,7 +141,7 @@ public: // 静的メンバ関数
 	/// 四角形モデル生成
 	/// </summary>
 	/// <returns>生成されたモデル</returns>
-	static Model2* CreateSquare(uint32_t count);
+	static Model2* CreateSquare(uint32_t squareCount);
 
 	/// <summary>
 	/// 描画前処理
