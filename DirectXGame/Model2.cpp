@@ -153,21 +153,21 @@ Model2* Model2::CreateSquare(uint32_t squareCount) {
 		float offsetX = static_cast<float>(i) * kSquareLength * 2.0f;
 
 		// 頂点設定
-		vertices[vIndex + 0].pos = { -kSquareLength + offsetX, -kSquareLength, 0.0f };
-		vertices[vIndex + 0].uv = { 0.0f, 1.0f };
-		vertices[vIndex + 0].normal = { 0.0f, 0.0f, -1.0f };
+		vertices[vIndex + 0].pos = {-kSquareLength + offsetX, -kSquareLength, 0.0f};
+		vertices[vIndex + 0].uv = {0.0f, 1.0f};
+		vertices[vIndex + 0].normal = {0.0f, 0.0f, -1.0f};
 
-		vertices[vIndex + 1].pos = { -kSquareLength + offsetX,  kSquareLength, 0.0f };
-		vertices[vIndex + 1].uv = { 0.0f, 0.0f };
-		vertices[vIndex + 1].normal = { 0.0f, 0.0f, -1.0f };
+		vertices[vIndex + 1].pos = {-kSquareLength + offsetX, kSquareLength, 0.0f};
+		vertices[vIndex + 1].uv = {0.0f, 0.0f};
+		vertices[vIndex + 1].normal = {0.0f, 0.0f, -1.0f};
 
-		vertices[vIndex + 2].pos = { kSquareLength + offsetX, -kSquareLength, 0.0f };
-		vertices[vIndex + 2].uv = { 1.0f, 1.0f };
-		vertices[vIndex + 2].normal = { 0.0f, 0.0f, -1.0f };
+		vertices[vIndex + 2].pos = {kSquareLength + offsetX, -kSquareLength, 0.0f};
+		vertices[vIndex + 2].uv = {1.0f, 1.0f};
+		vertices[vIndex + 2].normal = {0.0f, 0.0f, -1.0f};
 
-		vertices[vIndex + 3].pos = { kSquareLength + offsetX,  kSquareLength, 0.0f };
-		vertices[vIndex + 3].uv = { 1.0f, 0.0f };
-		vertices[vIndex + 3].normal = { 0.0f, 0.0f, -1.0f };
+		vertices[vIndex + 3].pos = {kSquareLength + offsetX, kSquareLength, 0.0f};
+		vertices[vIndex + 3].uv = {1.0f, 0.0f};
+		vertices[vIndex + 3].normal = {0.0f, 0.0f, -1.0f};
 
 		// インデックス設定（三角形2枚）
 		indices[iIndex + 0] = vIndex + 0;
@@ -179,6 +179,43 @@ Model2* Model2::CreateSquare(uint32_t squareCount) {
 	}
 
 	// 頂点とインデックスで初期化
+	instance->InitializeFromVertices(vertices, indices);
+
+	return instance;
+}
+
+Model2* Model2::CreateRing(uint32_t divisionCount) {
+	const float kOuterRadius = 5.0f;
+	const float kInnerRadius = 1.5f;
+	const float radStep = 2.0f * std::numbers::pi_v<float> / divisionCount;
+
+	auto* instance = new Model2;
+	std::vector<Mesh::VertexPosNormalUv> vertices;
+	std::vector<uint32_t> indices;
+	vertices.reserve(4 * divisionCount);
+	indices.reserve(6 * divisionCount);
+
+	for (uint32_t i = 0; i < divisionCount; ++i) {
+		float theta = i * radStep;
+		float thetaNext = (i + 1) * radStep;
+
+		float sin1 = std::sin(theta), cos1 = std::cos(theta);
+		float sin2 = std::sin(thetaNext), cos2 = std::cos(thetaNext);
+		float u = float(i) / divisionCount;
+		float uNext = float(i + 1) / divisionCount;
+
+		vertices.push_back({ {-sin1 * kOuterRadius, cos1 * kOuterRadius, 0}, {0, 0, -1}, {u, 0} });
+		vertices.push_back({ {-sin2 * kOuterRadius, cos2 * kOuterRadius, 0}, {0, 0, -1}, {uNext, 0} });
+		vertices.push_back({ {-sin1 * kInnerRadius, cos1 * kInnerRadius, 0}, {0, 0, -1}, {u, 1} });
+		vertices.push_back({ {-sin2 * kInnerRadius, cos2 * kInnerRadius, 0}, {0, 0, -1}, {uNext, 1} });
+
+		uint32_t base = i * 4;
+		indices.insert(indices.end(), {
+			base, base + 2, base + 1,
+			base + 2, base + 3, base + 1
+			});
+	}
+
 	instance->InitializeFromVertices(vertices, indices);
 
 	return instance;
