@@ -8,8 +8,9 @@ TitleScene::TitleScene() {
 
 // デストラクタ
 TitleScene::~TitleScene() {
-	delete backgroundSprite_;
 	delete titleSprite_;
+
+	delete stage_;
 }
 
 void TitleScene::Initialize() {
@@ -23,15 +24,14 @@ void TitleScene::Initialize() {
 	// カメラ
 	camera_.Initialize();
 
-	// 背景スプライトの初期化
-	backgroundSpriteHandle_ = TextureManager::Load("black.png");
-	backgroundSprite_ = Sprite::Create(backgroundSpriteHandle_, { 0.0f, 0.0f });
-	backgroundSprite_->SetSize(Vector2(1280, 720));
-
 	// タイトルスプライトの初期化
 	titleSpriteHandle_ = TextureManager::Load("title.png");
 	titleSprite_ = Sprite::Create(titleSpriteHandle_, {0.0f, -300.0f});
 	titleSprite_->SetSize(Vector2(1280, 720));
+
+	// ステージの初期化
+	stage_ = new Stage();
+	stage_->Initialize();
 }
 
 void TitleScene::Update() {
@@ -56,6 +56,9 @@ void TitleScene::Update() {
 		float alpha = 0.5f + 0.5f * sinf(timer * 3.1415f * 2.0f);
 		titleSprite_->SetColor({ 1.0f, 1.0f, 1.0f, alpha });  // RGBAで設定（1が不透明、0が透明）
 	}
+
+	// ステージの更新
+	stage_->Update();
 }
 
 void TitleScene::Draw() {
@@ -66,8 +69,8 @@ void TitleScene::Draw() {
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
-	// タイトルスプライトの描画
-	backgroundSprite_->Draw();
+	// ステージの描画
+	stage_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

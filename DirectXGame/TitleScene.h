@@ -1,5 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
+#include "Stage.h"
 
 class TitleScene
 {
@@ -30,14 +31,13 @@ private:
 	// カメラ
 	KamataEngine::Camera camera_;
 
-	// 背景スプライト
-	uint32_t backgroundSpriteHandle_ = 0;
-	KamataEngine::Sprite* backgroundSprite_ = nullptr;
-
 	// タイトルスプライト
 	uint32_t titleSpriteHandle_ = 0;
 	KamataEngine::Sprite* titleSprite_ = nullptr;
 
 	// 終了フラグ
 	bool finished_ = false;
+
+	// ステージ
+	Stage* stage_ = nullptr;
 };
