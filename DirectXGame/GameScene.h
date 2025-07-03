@@ -1,6 +1,7 @@
 #pragma once
 #include "Stage.h"
 #include "Player.h"
+#include "Graph2D.h"
 
 #include <KamataEngine.h>
 
@@ -32,6 +33,9 @@ private:
 
 	// プレイヤー
 	Player* player_ = nullptr;
+
+	// グラフ
+	Graph2D* graph_ = nullptr;
 
 	// ステージ
 	Stage* stage_ = nullptr;

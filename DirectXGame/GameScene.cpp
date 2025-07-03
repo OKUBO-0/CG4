@@ -8,6 +8,8 @@ GameScene::GameScene() {
 
 // デストラクタ
 GameScene::~GameScene() {
+	delete player_;
+	delete graph_;
 	delete stage_;
 }
 
@@ -26,6 +28,10 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	player_->Initialize();
 
+	// グラフの初期化
+	graph_ = new Graph2D();
+	graph_->Initialize();
+
 	// ステージの初期化
 	stage_ = new Stage();
 	stage_->Initialize();
@@ -34,6 +40,9 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// プレイヤーの更新
 	player_->Update();
+
+	// グラフの更新
+	graph_->Update();
 
 	// ステージの更新
 	stage_->Update();
@@ -71,6 +80,9 @@ void GameScene::Draw() {
 #pragma region 前景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
+
+	// グラフの描画
+	graph_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
