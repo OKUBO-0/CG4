@@ -10,6 +10,7 @@ TitleScene::TitleScene() {
 TitleScene::~TitleScene() {
 	delete backgroundSprite_;
 	delete titleSprite_;
+	delete hitEnterSprite_;
 }
 
 void TitleScene::Initialize() {
@@ -32,6 +33,12 @@ void TitleScene::Initialize() {
 	titleSpriteHandle_ = TextureManager::Load("title.png");
 	titleSprite_ = Sprite::Create(titleSpriteHandle_, {0.0f, -300.0f});
 	titleSprite_->SetSize(Vector2(1280, 720));
+
+	// HitEnter スプライトの初期化
+	hitEnterSpriteHandle_ = TextureManager::Load("hit_enter.png");
+	hitEnterSprite_ = Sprite::Create(hitEnterSpriteHandle_, { 0.0f, 0.0f });
+	hitEnterSprite_->SetSize(Vector2(1200, 720));
+	hitEnterSprite_->SetColor({ 1, 1, 1, 0 }); // 最初は非表示（透明）
 }
 
 void TitleScene::Update() {
@@ -50,11 +57,12 @@ void TitleScene::Update() {
 	}
 	else {
 		static float timer = 0.0f;
-		timer += 0.01f;  // 点滅の速さ調整
+		timer += 0.02f;  // 点滅の速さ調整
 
 		// sin波で0〜1の値を作る（0.5〜1.0に変換）
 		float alpha = 0.5f + 0.5f * sinf(timer * 3.1415f * 2.0f);
-		titleSprite_->SetColor({ 1.0f, 1.0f, 1.0f, alpha });  // RGBAで設定（1が不透明、0が透明）
+		// hitEnter点滅
+		hitEnterSprite_->SetColor({ 1.0f, 1.0f, 1.0f, alpha });
 	}
 }
 
@@ -90,6 +98,9 @@ void TitleScene::Draw() {
 
 	// タイトルスプライトの描画
 	titleSprite_->Draw();
+
+	// hitEnterスプライト
+	hitEnterSprite_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

@@ -38,6 +38,10 @@ private:
 	uint32_t titleSpriteHandle_ = 0;
 	KamataEngine::Sprite* titleSprite_ = nullptr;
 
+	// PushEnter スプライト
+	uint32_t hitEnterSpriteHandle_ = 0;
+	KamataEngine::Sprite* hitEnterSprite_ = nullptr;
+
 	// 終了フラグ
 	bool finished_ = false;
 };
