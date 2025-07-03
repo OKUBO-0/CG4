@@ -1,7 +1,7 @@
-#include "KamataEngine.h"
 #include "GameScene.h"
 #include "TitleScene.h"
 
+#include <KamataEngine.h>
 #include <Windows.h>
 
 using namespace KamataEngine;
@@ -16,9 +16,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
 	// ゲームシーンのインスタンス生成
-	TitleScene* titleScene = new TitleScene();
+	GameScene* gameScene = new GameScene();
 	// ゲームシーンの初期化
-	titleScene->Initialize();
+	gameScene->Initialize();
 
 	// メインループ
 	while (true) {
@@ -28,22 +28,22 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		}
 
 		// ゲームシーンの更新
-		titleScene->Update();
+		gameScene->Update();
 
 		// 描画開始
 		dxCommon->PreDraw();
 
 		// ゲームシーンの描画
-		titleScene->Draw();
+		gameScene->Draw();
 
 		// 描画終了
 		dxCommon->PostDraw();
 	}
 
 	// ゲームシーンの解放
-	delete titleScene;
+	delete gameScene;
 	// nullptrの代入
-	titleScene = nullptr;
+	gameScene = nullptr;
 
 	// エンジンの終了処理
 	Finalize();

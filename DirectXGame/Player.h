@@ -1,17 +1,14 @@
 #pragma once
-#include "Stage.h"
-#include "Player.h"
-
 #include <KamataEngine.h>
 
-class GameScene
+class Player
 {
 public:
 	// コンストラクタ
-	GameScene();
+	Player();
 
 	// デストラクタ
-	~GameScene();
+	~Player();
 
 	// 初期化
 	void Initialize();
@@ -23,16 +20,17 @@ public:
 	void Draw();
 
 private:
-	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
+	// 入力インスタンス
 	KamataEngine::Input* input_ = nullptr;
-	KamataEngine::Audio* audio_ = nullptr;
+	// ワールドトランスフォーム
+	KamataEngine::WorldTransform worldTransform_;
 
 	// カメラ
 	KamataEngine::Camera camera_;
 
-	// プレイヤー
-	Player* player_ = nullptr;
+	// プレイヤーモデル
+	KamataEngine::Model* playerModel_ = nullptr;
 
-	// ステージ
-	Stage* stage_ = nullptr;
+	float speed_ = 0.3f;
 };
+

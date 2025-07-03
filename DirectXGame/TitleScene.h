@@ -1,6 +1,7 @@
 #pragma once
-#include "KamataEngine.h"
 #include "Stage.h"
+
+#include <KamataEngine.h>
 
 class TitleScene
 {
