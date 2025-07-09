@@ -37,7 +37,7 @@ void TitleScene::Initialize() {
 	// HitEnter スプライトの初期化
 	hitEnterSpriteHandle_ = TextureManager::Load("hit_enter.png");
 	hitEnterSprite_ = Sprite::Create(hitEnterSpriteHandle_, { 0.0f, 0.0f });
-	hitEnterSprite_->SetSize(Vector2(1200, 720));
+	hitEnterSprite_->SetSize(Vector2(1280, 720));
 	hitEnterSprite_->SetColor({ 1, 1, 1, 0 }); // 最初は非表示（透明）
 }
 
