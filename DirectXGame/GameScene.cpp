@@ -9,8 +9,9 @@ GameScene::GameScene() {
 // デストラクタ
 GameScene::~GameScene() {
 	delete player_;
-	delete graph_;
 	delete stage_;
+	delete graph_;
+	delete score_;
 }
 
 void GameScene::Initialize() {
@@ -28,24 +29,37 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	player_->Initialize();
 
+	// ステージの初期化
+	stage_ = new Stage();
+	stage_->Initialize();
+
 	// グラフの初期化
 	graph_ = new Graph2D();
 	graph_->Initialize();
 
-	// ステージの初期化
-	stage_ = new Stage();
-	stage_->Initialize();
+	// スコアの初期化
+	score_ = new Score();
+	score_->Initialize();
+	score_->SetNumber(0);
 }
 
 void GameScene::Update() {
 	// プレイヤーの更新
 	player_->Update();
 
+	// ステージの更新
+	stage_->Update();
+
 	// グラフの更新
 	graph_->Update();
 
-	// ステージの更新
-	stage_->Update();
+	// スコアの更新
+	static int currentScore = 0;
+	if (input_->TriggerKey(DIK_SPACE)) {
+		++currentScore;
+		score_->SetNumber(currentScore);
+	}
+	score_->Update();
 }
 
 void GameScene::Draw() {
@@ -83,6 +97,9 @@ void GameScene::Draw() {
 
 	// グラフの描画
 	graph_->Draw();
+
+	// スコアの描画
+	score_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

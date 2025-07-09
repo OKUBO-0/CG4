@@ -46,7 +46,7 @@ void Graph2D::Update() {
 }
 
 void Graph2D::Draw() {
-	auto dxCommon = DirectXCommon::GetInstance();
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	redGraph_->Draw();

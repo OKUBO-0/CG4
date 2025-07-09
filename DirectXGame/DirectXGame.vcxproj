@@ -110,6 +110,7 @@
     <ClCompile Include="Graph2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WorldTransformEx.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Graph2D.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
