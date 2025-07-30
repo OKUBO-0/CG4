@@ -12,11 +12,12 @@ Stage::~Stage() {
 
 void Stage::Initialize() {
 	// テクスチャ読み込み
-	backgroundHandle_ = TextureManager::Load("black1x1.png");
+	backgroundHandle_ = TextureManager::Load("stage.png");
+	inversionHandle_ = TextureManager::Load("inversion.png");
 
 	// スプライト生成（2枚）
 	background1_ = Sprite::Create(backgroundHandle_, { 0.0f, 0.0f });
-	background2_ = Sprite::Create(backgroundHandle_, { 1280.0f, 0.0f });
+	background2_ = Sprite::Create(inversionHandle_, { 1280.0f, 0.0f });
 
 	// サイズ指定
 	background1_->SetSize({ 1280, 720 });

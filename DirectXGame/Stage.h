@@ -20,6 +20,7 @@ public:
 
 private:
 	uint32_t backgroundHandle_;
+	uint32_t inversionHandle_;
 	KamataEngine::Sprite* background1_ = nullptr;
 	KamataEngine::Sprite* background2_ = nullptr;
 

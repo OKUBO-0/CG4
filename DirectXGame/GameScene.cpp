@@ -44,6 +44,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	if (input_->TriggerKey(DIK_RETURN)) {
+		finished_ = true;
+	}
+
 	// プレイヤーの更新
 	player_->Update();
 
@@ -55,10 +59,8 @@ void GameScene::Update() {
 
 	// スコアの更新
 	static int currentScore = 0;
-	if (input_->TriggerKey(DIK_SPACE)) {
-		++currentScore;
-		score_->SetNumber(currentScore);
-	}
+	++currentScore;
+	score_->SetNumber(currentScore);
 	score_->Update();
 }
 

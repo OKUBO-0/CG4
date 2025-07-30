@@ -3,10 +3,11 @@
 #include "Stage.h"
 #include "Graph2D.h"
 #include "Score.h"
+#include "IScene.h"
 
 #include <KamataEngine.h>
 
-class GameScene
+class GameScene : public IScene
 {
 public:
 	// コンストラクタ
@@ -23,6 +24,9 @@ public:
 
 	// 描画
 	void Draw();
+
+	// 終了フラグ
+	bool IsFinished() const { return finished_; }
 
 private:
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
@@ -43,4 +47,7 @@ private:
 
 	// スコア
 	Score* score_ = nullptr;
+
+	// 終了フラグ
+	bool finished_ = false;
 };
